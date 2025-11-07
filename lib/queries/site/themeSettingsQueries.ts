@@ -1,0 +1,35 @@
+import { gql } from "@apollo/client";
+
+// This query works in GraphQL IDE
+export const GET_THEME_SETTINGS = gql`
+  query GetThemeSettings {
+    themeSettings {
+      themeOptionsFields {
+        announceBarMessage
+        socialLinkBlockHeading
+        socialLinks {
+          seelctSocialPlatform
+          socialLinkUrl
+        }
+        socialLinkBlockMenu {
+          menuItemLabel
+          menuItemLink
+        }
+        footerMenu1Title
+        footer_menu1_item_label_link {
+          footer_menu1_item_label
+          footer_menu1_item_link
+        }
+        footer_menu2_title
+        footerMenu2ItemLabelLink {
+          footer_menu2_item_label
+          footer_menu2_item_link
+        }
+        footer_about_heading
+        footer_about_description
+        copyrightText1
+        copyrightText2
+      }
+    }
+  }
+`;
