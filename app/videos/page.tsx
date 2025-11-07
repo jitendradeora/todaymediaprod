@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function VideosPage() {
-  const { videos, hasMore, endCursor } = await fetchVideos(10);
+  const { videos, hasMore, endCursor } = await fetchVideos(12);
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
