@@ -26,8 +26,8 @@ export default function VideosList({
     setIsLoading(true);
     try {
       const url = endCursor 
-        ? `/api/videos?after=${encodeURIComponent(endCursor)}&limit=10`
-        : `/api/videos?limit=10`;
+        ? `/api/videos?after=${encodeURIComponent(endCursor)}&limit=12`
+        : `/api/videos?limit=12`;
         
       const response = await fetch(url);
       const data = await response.json();
