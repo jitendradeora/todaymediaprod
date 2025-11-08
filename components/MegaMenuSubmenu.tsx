@@ -53,7 +53,7 @@ export function MegaMenuSubmenu({ item }: MegaMenuSubmenuProps) {
       {/* Third Level Dropdown - Smart positioning */}
       {item.subcategories && (
         <div 
-          className={`absolute top-0 bg-background border border-border shadow-xl rounded-lg min-w-[200px] py-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 pointer-events-none group-hover/sub:pointer-events-auto ${
+          className={`absolute top-0 bg-background border border-border shadow-xl min-w-[200px] opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 pointer-events-none group-hover/sub:pointer-events-auto ${
             openToLeft 
               ? 'right-full mr-1' 
               : 'left-full ml-1'

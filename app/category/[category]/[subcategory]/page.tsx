@@ -117,8 +117,11 @@ export default async function SubCategoryListingPage({ params }: PageProps) {
           {/* Page Header */}
           <div className="mb-8">
             <h1 className="text-3xl mb-2">{subcategoryName}</h1>
-            <p className="text-gray-600">
-              {filteredArticles.length} {filteredArticles.length === 1 ? 'مقال' : 'مقالات'}
+            <p className="text-gray-600 dark:text-gray-400">
+              {(() => {
+                const totalCount = filteredArticles[0]?.categoryCount ?? filteredArticles.length;
+                return `${totalCount} ${totalCount === 1 ? 'مقال' : 'مقالات'}`;
+              })()}
             </p>
           </div>
 

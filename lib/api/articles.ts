@@ -6,6 +6,7 @@ import {
   GET_ARTICLES_BY_TAG,
   GET_ARTICLES_BY_AUTHOR,
   GET_ARTICLES_BY_AUTHOR_ID,
+  GET_AUTHOR_POST_COUNT,
 } from "@/lib/queries/article/articleQuires";
 import {
   transformPostToArticle,
@@ -252,6 +253,26 @@ export async function fetchArticlesByAuthorId(
       articles: [],
       pageInfo: { hasNextPage: false, endCursor: null },
     };
+  }
+}
+
+/**
+ * Fetch total count of articles by author ID using GraphQL query
+ */
+export async function fetchAuthorArticlesCount(authorId: number): Promise<number> {
+  try {
+    const { data } = await apolloClient.query<{
+      authorPostCount: number;
+    }>({
+      query: GET_AUTHOR_POST_COUNT,
+      variables: { authorId },
+      fetchPolicy: 'network-only',
+    });
+
+    return data?.authorPostCount || 0;
+  } catch (error) {
+    console.error('Error fetching author articles count:', error);
+    return 0;
   }
 }
 

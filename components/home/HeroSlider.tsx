@@ -64,7 +64,7 @@ export function HeroSlider({ articles }: HeroSliderProps) {
     <section className="container mx-auto px-2 lg:px-4 py-2 lg:py-8">
       <div className="relative">
         <div
-          className="relative overflow-hidden rounded-xl lg:rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-xl lg:shadow-2xl min-h-[560px] lg:h-[600px] mb-4 lg:mb-0"
+          className="relative overflow-hidden rounded-xl lg:rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 shadow-xl lg:shadow-2xl min-h-[700px] lg:h-[600px] mb-4 lg:mb-0"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -83,7 +83,7 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     {/* Category Badge with Icon */}
                     <div className="flex items-center gap-2 justify-start">
                       <div className="w-8 h-8 lg:w-12 lg:h-12 bg-[#c90000] rounded-full flex items-center justify-center shadow-lg">
-                          <Link href={`/${article.categorySlug}/${article.id}`}>
+                      <Link href={`/${article.categorySlug}/${article.id}`}>
                         <div className="w-8 h-8 lg:w-12 lg:h-12 bg-[#c90000] rounded-full flex items-center justify-center shadow-lg hover:bg-[#a00000] transition-colors cursor-pointer">
                           <TrendingUp className="w-4 h-4 lg:w-6 lg:h-6 text-white" />
                         </div>
@@ -144,10 +144,10 @@ export function HeroSlider({ articles }: HeroSliderProps) {
 
                 {/* Image - 60% Right Side */}
                 <div className="lg:col-span-3 relative overflow-hidden order-1 lg:order-2 h-full min-h-[280px] lg:min-h-[550px]">
-                  <Link
+                  {/* <Link
                     href={`/${article.categorySlug}/${article.id}`}
                     className="block h-full group"
-                  >
+                  > */}
                     <Image
                       src={article.image}
                       alt={article.title}
@@ -167,7 +167,7 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     {/* Decorative corner element */}
                     <div className="absolute top-0 left-0 w-32 h-32 bg-[#c90000] opacity-20 rounded-br-full hidden lg:block"></div>
                     <div className="absolute bottom-0 right-0 w-40 h-40 bg-gradient-to-tl from-[#c90000]/30 to-transparent rounded-tl-full hidden lg:block"></div>
-                  </Link>
+                  {/* </Link> */}
 
                   {/* Slider Controls - Desktop only, positioned at bottom left of image */}
                   <div className="hidden lg:flex absolute left-6 bottom-6 gap-3 z-20">

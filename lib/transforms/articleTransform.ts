@@ -66,6 +66,7 @@ export function transformPostToArticle(post: any): Article {
     image: post.featuredImage?.node?.sourceUrl || "/assets/img/default-article.jpg",
     category: post.categories?.nodes?.[0]?.name || "عام",
     categorySlug: post.categories?.nodes?.[0]?.slug || "general",
+    categoryCount: post.categories?.nodes?.[0]?.count,
     date: formatDate(post.date),
     author: post.author?.node?.name || "اليوم ميديا",
     authorId: post.author?.node?.databaseId,
@@ -136,6 +137,7 @@ export interface WordPressPost {
     nodes: Array<{
       name: string;
       slug: string;
+      count?: number;
     }>;
   };
   author: {

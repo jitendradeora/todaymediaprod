@@ -46,7 +46,6 @@ const Button = React.forwardRef<
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
       ref={ref}
       {...props}
     />
