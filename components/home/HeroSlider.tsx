@@ -138,7 +138,7 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     {/* Read More Button */}
                     <Link 
                       href={`/${article.categorySlug}/${article.id}`}
-                      className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base"
+                      className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 inline-flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base"
                       aria-label={`اقرأ المزيد عن ${article.title}`}
                     >
                       <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
