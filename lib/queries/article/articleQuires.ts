@@ -165,6 +165,7 @@ export const GET_ARTICLES_BY_CATEGORY = gql`
           nodes {
             name
             slug
+            count
           }
         }
         tags {
@@ -305,6 +306,7 @@ export const GET_ARTICLES_BY_AUTHOR = gql`
           nodes {
             name
             slug
+            count
           }
         }
         tags {
@@ -412,5 +414,11 @@ export const GET_ARTICLES_BY_AUTHOR_ID = gql`
         }
       }
     }
+  }
+`;
+
+export const GET_AUTHOR_POST_COUNT = gql`
+  query GetAuthorPostCount($authorId: Int!) {
+    authorPostCount(authorId: $authorId)
   }
 `;

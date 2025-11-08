@@ -64,7 +64,7 @@ export function StickyNav({ categories, logoUrl }: { categories: Category[]; log
 
                 {category.subcategories && (
                   <div
-                    className="absolute top-full right-0 mt-0 bg-background border border-border shadow-xl rounded-lg min-w-[220px] py-2 opacity-0 invisible group-hover/main:opacity-100 group-hover/main:visible transition-all duration-200 pointer-events-none group-hover/main:pointer-events-auto"
+                    className="absolute top-full right-0 mt-0 bg-background border border-border shadow-xl min-w-[220px] opacity-0 invisible group-hover/main:opacity-100 group-hover/main:visible transition-all duration-200 pointer-events-none group-hover/main:pointer-events-auto"
                     style={{ zIndex: 9999 }}
                   >
                     {category.subcategories.map((sub, subIndex) => (
@@ -81,7 +81,7 @@ export function StickyNav({ categories, logoUrl }: { categories: Category[]; log
 
                         {sub.subcategories && (
                           <div
-                            className={`absolute top-0 bg-background border border-border shadow-xl rounded-lg min-w-[200px] py-2 opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 pointer-events-none group-hover/sub:pointer-events-auto ${
+                            className={`absolute top-0 bg-background border border-border shadow-xl min-w-[200px] opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 pointer-events-none group-hover/sub:pointer-events-auto ${
                               categoryIndex < 2 ? "left-full ml-1" : "right-full mr-1"
                             }`}
                             style={{ zIndex: 9999 }}

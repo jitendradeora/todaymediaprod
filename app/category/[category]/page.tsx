@@ -1,16 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { fetchArticlesByCategory } from '@/lib/api/articles';
 import { generateCategoryMetadata, siteConfig } from '@/lib/metadata';
 import { generateCollectionPageSchema, generateBreadcrumbSchema } from '@/lib/schemas';
-
-// Dynamically import NewsCard to reduce initial bundle
-const NewsCard = dynamic(() => import('@/components/NewsCard'), {
-  loading: () => <div className="h-96 bg-gray-100 dark:bg-gray-800 animate-pulse rounded-lg" />,
-  ssr: true,
-});
+import CategoryArticlesList from './CategoryArticlesList';
 
 interface PageProps {
   params: Promise<{
@@ -52,7 +46,7 @@ export default async function ArticleListingPage({ params }: PageProps) {
     const { category } = await params;
     
     // Fetch fewer articles initially for better performance (12 instead of 20)
-    const { articles: filteredArticles } = await fetchArticlesByCategory(category, 12);
+    const { articles: filteredArticles, pageInfo } = await fetchArticlesByCategory(category, 12);
 
     const categoryName = filteredArticles.length > 0 
       ? filteredArticles[0]?.category 
@@ -108,28 +102,25 @@ export default async function ArticleListingPage({ params }: PageProps) {
 
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-3xl mb-2">{categoryName}</h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              {filteredArticles.length} {filteredArticles.length === 1 ? 'مقال' : 'مقالات'}
-            </p>
+            <div className="flex items-center mb-2 gap-3">
+              <h1 className="text-3xl">{categoryName}</h1>
+              <span className="ml-4 text-gray-600 dark:text-gray-400">
+                {(() => {
+                  const totalCount = filteredArticles[0]?.categoryCount ?? filteredArticles.length;
+                  return `${totalCount} ${totalCount === 1 ? 'مقال' : 'مقالات'}`;
+                })()}
+              </span>
+            </div>
           </div>
 
           {/* Articles Grid or Empty State */}
           {filteredArticles.length > 0 ? (
-            <>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredArticles.map((article) => (
-                  <NewsCard key={article.id} {...article} />
-                ))}
-              </div>
-
-              {/* Load More Button */}
-              <div className="text-center mt-12">
-                <button className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
-                  تحميل المزيد
-                </button>
-              </div>
-            </>
+            <CategoryArticlesList
+              initialArticles={filteredArticles}
+              categorySlug={category}
+              hasNextPage={pageInfo.hasNextPage}
+              endCursor={pageInfo.endCursor}
+            />
           ) : (
             <div className="text-center py-16">
               <p className="text-gray-500 text-lg">لا توجد مقالات في هذا القسم</p>

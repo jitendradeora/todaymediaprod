@@ -44,7 +44,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-8 max-w-[85.375rem]">
+      <div className="container mx-auto px-0 lg:px-4 py-0 lg:py-8 max-w-[85.375rem] ">
         <div className="max-w-5xl mx-auto">
           {/* Video Player */}
           <VideoPlayer
@@ -55,7 +55,7 @@ export default async function VideoPage({ params }: VideoPageProps) {
           />
 
           {/* Video Details */}
-          <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg p-6 text-right">
+          <div className="mt-6 bg-white dark:bg-gray-800 p-6 text-right">
             <h1 className="text-2xl md:text-3xl font-bold mb-4 text-gray-900 dark:text-white">
               {video.title}
             </h1>

@@ -232,3 +232,9 @@ html {
 .prose div + div {
   margin-top: 1rem;
 }
+
+.wp-block-embed__wrapper iframe {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+}

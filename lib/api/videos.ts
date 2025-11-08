@@ -9,6 +9,7 @@ export interface Video {
   duration: string;
   views: string;
   category: string;
+  categoryCount?: number;
   slug?: string;
   videoSource?: string;
   youtubeUrl?: string;
@@ -30,6 +31,7 @@ interface VideoNode {
   videoCategories?: {
     nodes: Array<{
       name: string;
+      count?: number;
     }>;
   };
 }
@@ -136,9 +138,69 @@ export async function fetchVideoBySlug(slug: string): Promise<Video | null> {
 }
 
 /**
+ * Fetch total count of all videos
+ */
+export async function fetchTotalVideosCount(): Promise<number> {
+  try {
+    // Fetch with a large limit to get all videos and count them
+    const result = await apolloClient.query<{
+      videos: {
+        nodes: VideoNode[];
+        pageInfo: {
+          hasNextPage: boolean;
+          endCursor: string | null;
+        };
+      };
+    }>({
+      query: GET_VIDEOS,
+      variables: { first: 100, after: null },
+      fetchPolicy: 'network-only',
+    });
+
+    if (result.error || !result.data?.videos?.nodes) {
+      return 0;
+    }
+
+    let totalCount = result.data.videos.nodes.length;
+    let hasNextPage = result.data.videos.pageInfo.hasNextPage;
+    let endCursor = result.data.videos.pageInfo.endCursor;
+
+    // If there are more pages, continue fetching to get the total count
+    while (hasNextPage && endCursor) {
+      const nextResult = await apolloClient.query<{
+        videos: {
+          nodes: VideoNode[];
+          pageInfo: {
+            hasNextPage: boolean;
+            endCursor: string | null;
+          };
+        };
+      }>({
+        query: GET_VIDEOS,
+        variables: { first: 100, after: endCursor },
+        fetchPolicy: 'network-only',
+      });
+
+      if (nextResult.error || !nextResult.data?.videos?.nodes) {
+        break;
+      }
+
+      totalCount += nextResult.data.videos.nodes.length;
+      hasNextPage = nextResult.data.videos.pageInfo.hasNextPage;
+      endCursor = nextResult.data.videos.pageInfo.endCursor;
+    }
+
+    return totalCount;
+  } catch (error) {
+    console.error('Error fetching total videos count:', error);
+    return 0;
+  }
+}
+
+/**
  * Fetch videos with pagination
  */
-export async function fetchVideos(limit: number = 10, after?: string): Promise<{ videos: Video[], hasMore: boolean, endCursor: string | null }> {
+export async function fetchVideos(limit: number = 10, after?: string): Promise<{ videos: Video[], hasMore: boolean, endCursor: string | null, totalCount?: number }> {
   try {
     const result = await apolloClient.query<{
       videos: {
@@ -178,6 +240,7 @@ export async function fetchVideos(limit: number = 10, after?: string): Promise<{
         duration: '',
         views: '',
         category: node.videoCategories?.nodes?.[0]?.name || '',
+        categoryCount: node.videoCategories?.nodes?.[0]?.count,
         videoSource,
         youtubeUrl: node.videoOptions?.youtubeUrl || '',
         image: node.videoOptions?.image || '',

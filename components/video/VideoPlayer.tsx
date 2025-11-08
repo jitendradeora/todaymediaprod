@@ -44,7 +44,7 @@ export default function VideoPlayer({
   };
 
   return (
-    <div className="relative w-full aspect-video bg-black rounded-lg overflow-hidden">
+    <div className="relative w-full aspect-video bg-black lg:rounded-lg overflow-hidden">
       {!isPlaying ? (
         // Thumbnail with play button
         <div className="relative w-full h-full group cursor-pointer" onClick={handlePlayClick}>

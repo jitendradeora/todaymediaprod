@@ -39,6 +39,7 @@ export const GET_VIDEOS = gql`
         videoCategories {
           nodes {
             name
+            count
           }
         }
       }

@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { fetchVideos } from '@/lib/api/videos';
+import { fetchVideos, fetchTotalVideosCount } from '@/lib/api/videos';
 import VideosList from './VideosList';
 
 export const metadata: Metadata = {
@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default async function VideosPage() {
   const { videos, hasMore, endCursor } = await fetchVideos(12);
+  const totalCount = await fetchTotalVideosCount();
 
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -19,7 +20,9 @@ export default async function VideosPage() {
             جميع الفيديوهات
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            {videos.length > 0 ? `${videos.length} فيديو متاح` : 'لا توجد فيديوهات'}
+            {totalCount === 0 
+              ? 'لا توجد فيديوهات' 
+              : `${totalCount} ${totalCount === 1 ? 'فيديو متاح' : 'فيديو متاح'}`}
           </p>
         </div>
 

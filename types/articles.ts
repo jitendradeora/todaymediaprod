@@ -27,6 +27,7 @@ export interface Article {
   image: string;
   category: string;
   categorySlug: string;
+  categoryCount?: number;
   date: string;
   author: string;
   authorId?: number;

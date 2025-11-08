@@ -1,5 +1,5 @@
 import NewsCard from '@/components/NewsCard';
-import { fetchArticlesByAuthorId } from '@/lib/api/articles';
+import { fetchArticlesByAuthorId, fetchAuthorArticlesCount } from '@/lib/api/articles';
 import { FileText } from 'lucide-react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -56,6 +56,9 @@ export default async function AuthorPage({ params }: PageProps) {
 
   // Get author info from first article
   const authorName = authorArticles[0]?.author || id;
+  
+  // Fetch total count of articles by this author
+  const totalArticlesCount = await fetchAuthorArticlesCount(Number(id));
 
   return (
     <div className="min-h-screen">
@@ -72,7 +75,7 @@ export default async function AuthorPage({ params }: PageProps) {
               <div className="flex gap-6 text-sm text-gray-600 dark:text-gray-400">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4" />
-                  <span>{authorArticles.length}+ مقال</span>
+                  <span>{totalArticlesCount} {totalArticlesCount === 1 ? 'مقال' : 'مقالات'}</span>
                 </div>
               </div>
             </div>
