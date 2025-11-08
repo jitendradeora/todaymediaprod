@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { fetchVideoBySlug } from "@/lib/api/videos";
 import VideoPlayer from "@/components/video/VideoPlayer";
+import { generateVideoObjectSchema, generateBreadcrumbSchema } from "@/lib/schemas";
+import { siteConfig } from "@/lib/metadata";
 
 interface VideoPageProps {
   params: {
@@ -42,8 +44,33 @@ export default async function VideoPage({ params }: VideoPageProps) {
     notFound();
   }
 
+  // Generate schemas for SEO
+  const videoUrl = `${siteConfig.url}/video/${videoId}`;
+  const videoSchema = generateVideoObjectSchema(
+    video.title,
+    video.content || `مشاهدة فيديو ${video.title}`,
+    video.thumbnail || '',
+    new Date(video.date).toISOString(),
+    video.duration || 'PT0M',
+    videoUrl
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: 'الفيديوهات', url: `${siteConfig.url}/videos` },
+    { name: video.title, url: videoUrl }
+  ]);
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(videoSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="container mx-auto px-0 lg:px-4 py-0 lg:py-8 max-w-[85.375rem] ">
         <div className="max-w-5xl mx-auto">
           {/* Video Player */}

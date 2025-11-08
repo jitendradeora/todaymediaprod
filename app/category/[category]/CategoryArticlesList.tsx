@@ -74,6 +74,7 @@ export default function CategoryArticlesList({
             onClick={loadMore}
             disabled={loading}
             className="px-8 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label={loading ? "جاري التحميل" : "تحميل المزيد من المقالات"}
           >
             {loading ? 'جاري التحميل...' : 'تحميل المزيد'}
           </button>

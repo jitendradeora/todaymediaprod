@@ -171,3 +171,33 @@ export function generateFAQPageSchema(faqs: Array<{ question: string; answer: st
     })),
   };
 }
+
+export function generateAboutPageSchema(
+  title: string,
+  description: string,
+  url: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: title,
+    description: description,
+    url: url,
+    inLanguage: 'ar',
+  };
+}
+
+export function generateWebPageSchema(
+  title: string,
+  description: string,
+  url: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description: description,
+    url: url,
+    inLanguage: 'ar',
+  };
+}

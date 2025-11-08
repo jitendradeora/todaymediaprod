@@ -14,6 +14,7 @@ interface OpinionsSectionProps {
   bgColor?: string;
   title?: string;
   color?: string;
+  categoryLink?: string;
 }
 
 export function OpinionsSection({
@@ -21,13 +22,14 @@ export function OpinionsSection({
   bgColor = "bg-muted/20",
   title = "آراء",
   color = "#f97316",
+  categoryLink,
 }: OpinionsSectionProps) {
   if (articles.length === 0) return null;
 
   return (
     <div className={`${bgColor} py-12`}>
       <section className="container mx-auto px-4">
-        <SectionHeader title={title} color={color} />
+        <SectionHeader title={title} color={color} href={categoryLink} />
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {articles.slice(0, 4).map((article) => (
             <ArticleCardWithAuthor key={article.id} {...article} />

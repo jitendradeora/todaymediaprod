@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import ScrollToTop from "@/components/ScrollToTop";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import HeaderAdBanner from "@/components/HeaderAdBanner";
+import GlobalLoader from "@/components/GlobalLoader";
 import { baseMetadata } from "@/lib/metadata";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
@@ -54,6 +56,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <GlobalLoader />
           <ScrollToTop />
           <Suspense fallback={
             <div className="bg-background shadow-sm border-b border-border sticky top-0 z-50">
@@ -61,6 +64,9 @@ export default async function RootLayout({
             </div>
           }>
             <Header />
+          </Suspense>
+          <Suspense fallback={null}>
+            <HeaderAdBanner />
           </Suspense>
           {children}
           <Suspense fallback={<Skeleton className="h-64 w-full" />}>

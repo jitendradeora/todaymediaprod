@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { fetchArticleById, fetchArticlesByCategory } from '@/lib/api/articles';
 import { generateArticleMetadata, siteConfig } from '@/lib/metadata';
 import { generateNewsArticleSchema, generateBreadcrumbSchema } from '@/lib/schemas';
+import { fetchArticlePageAdBanner } from '@/lib/actions/site/themeSettingsAction';
 import ArticleContent from './ArticleContent';
 import { Article } from '@/types/articles';
 
@@ -88,13 +89,18 @@ export default async function ArticleDetailsPage({ params }: PageProps) {
       notFound();
     }
 
-    // Fetch articles from the same category to get previous/next (20 articles is sufficient)
+    // Fetch articles from the same category to get previous/next and related articles
     const { articles: categoryArticles } = await fetchArticlesByCategory(article.categorySlug, 20);
     
     // Find current article index
     const currentIndex = categoryArticles.findIndex(a => a.id === article.id);
     const previousArticle = currentIndex > 0 ? categoryArticles[currentIndex - 1] : null;
     const nextArticle = currentIndex < categoryArticles.length - 1 ? categoryArticles[currentIndex + 1] : null;
+    
+    // Get related articles (exclude current article, limit to 6)
+    const relatedArticles = categoryArticles
+      .filter(a => a.id !== article.id)
+      .slice(0, 6);
 
     // Generate schemas for SEO
     const articleUrl = `${siteConfig.url}/${category}/${id}`;
@@ -121,6 +127,30 @@ export default async function ArticleDetailsPage({ params }: PageProps) {
 
     const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
 
+    // Fetch article page ad banner
+    const articlePageAdBanner = await fetchArticlePageAdBanner();
+
+    // Clean and convert AMP HTML to regular HTML for ad banner
+    const cleanAdBanner = articlePageAdBanner 
+      ? articlePageAdBanner
+          .trim()
+          .replace(/\r\n/g, ' ')
+          .replace(/\n/g, ' ')
+          .replace(/\s+/g, ' ')
+          .replace(/<amp-img\s+/gi, '<img ')
+          .replace(/<\/amp-img>/gi, '')
+          .replace(/\s+layout=["']responsive["']\s*/gi, ' ')
+          .replace(/\s+layout=["']intrinsic["']\s*/gi, ' ')
+          .replace(/\s+layout=["']fixed["']\s*/gi, ' ')
+          .replace(/<img([^>]*?)(?:\s*\/)?>/gi, (match, attrs) => {
+            attrs = attrs.replace(/\s+layout=["'][^"']*["']/gi, '');
+            if (!match.endsWith('/>') && !match.endsWith('>')) {
+              return `<img${attrs} />`;
+            }
+            return `<img${attrs} />`;
+          })
+      : null;
+
     return (
       <>
         {/* JSON-LD Schema - Use generated schema */}
@@ -139,7 +169,17 @@ export default async function ArticleDetailsPage({ params }: PageProps) {
           previousArticle={previousArticle}
           nextArticle={nextArticle}
           categorySlug={category}
+          relatedArticles={relatedArticles}
         />
+
+        {/* Article Page Ad Banner - Before Footer */}
+        {cleanAdBanner && (
+          <div className="container mx-auto px-4 py-8 flex justify-center">
+            <div 
+              dangerouslySetInnerHTML={{ __html: cleanAdBanner }}
+            />
+          </div>
+        )}
       </>
     );
   } catch (error) {

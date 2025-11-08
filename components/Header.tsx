@@ -52,7 +52,7 @@ export default async function Header() {
 
       <div className="container mx-auto px-4 py-2 lg:py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 lg:hidden">
+          <div className="flex items-center gap-1 lg:hidden">
             <MobileSearch />
             <MobileMenu categories={categories} socialLinks={socialData?.links} />
           </div>

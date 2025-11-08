@@ -6,6 +6,8 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { LoadMoreButton } from '@/components/shared/LoadMoreButton';
 import { loadMoreAuthorArticles } from './actions';
+import { generatePersonSchema, generateBreadcrumbSchema, generateCollectionPageSchema } from '@/lib/schemas';
+import { siteConfig } from '@/lib/metadata';
 
 interface PageProps {
   params: Promise<{ 
@@ -60,8 +62,43 @@ export default async function AuthorPage({ params }: PageProps) {
   // Fetch total count of articles by this author
   const totalArticlesCount = await fetchAuthorArticlesCount(Number(id));
 
+  // Generate schemas for SEO
+  const authorUrl = `${siteConfig.url}/author/${id}`;
+  const personSchema = generatePersonSchema(
+    authorName,
+    `كاتب في ${siteConfig.name} - ${totalArticlesCount} مقال`,
+    siteConfig.url,
+    Number(id)
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: authorName, url: authorUrl }
+  ]);
+  const collectionSchema = generateCollectionPageSchema(
+    `مقالات ${authorName}`,
+    `تصفح جميع مقالات ${authorName}`,
+    authorUrl,
+    authorArticles.map(article => ({
+      title: article.title,
+      url: `${siteConfig.url}/${article.categorySlug}/${article.id}`
+    }))
+  );
+
   return (
     <div className="min-h-screen">
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+      />
       <main className="container mx-auto px-4 py-8">
         {/* Author Profile */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 mb-8 border border-gray-200 dark:border-gray-700">

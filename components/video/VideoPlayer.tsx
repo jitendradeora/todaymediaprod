@@ -55,7 +55,7 @@ export default function VideoPlayer({
           />
           <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
             <div className="w-20 h-20 md:w-24 md:h-24 bg-[#c90000] hover:bg-[#a00000] rounded-full flex items-center justify-center text-white transition-all transform group-hover:scale-110 shadow-2xl">
-              <Play className="w-10 h-10 md:w-12 md:h-12 mr-1" fill="white" />
+              <Play className="w-10 h-10 md:w-12 md:h-12 ml-1" fill="white" />
             </div>
           </div>
         </div>
