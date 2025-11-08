@@ -133,13 +133,6 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     </div>
 
                     {/* Read More Button */}
-<<<<<<< Updated upstream
-                    <Link href={`/${article.categorySlug}/${article.id}`}>
-                      <button className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base">
-                        <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
-                        <span>اقرأ المزيد</span>
-                      </button>
-=======
                     <Link 
                       href={`/${article.categorySlug}/${article.id}`}
                       className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 inline-flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base"
@@ -147,7 +140,6 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     >
                       <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
                       <span>اقرأ المزيد</span>
->>>>>>> Stashed changes
                     </Link>
                   </div>
                 </div>
