@@ -60,6 +60,7 @@ export function LoadMoreButton({ hasNextPage, endCursor, fetchMore, categorySlug
             onClick={handleLoadMore}
             disabled={loading}
             className="bg-[#c90000] hover:bg-[#a00000] text-white px-8 py-3 rounded-lg transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            aria-label={loading ? "جاري التحميل" : "تحميل المزيد من المقالات"}
           >
             {loading ? (
               <>

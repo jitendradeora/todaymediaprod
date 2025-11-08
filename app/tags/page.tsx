@@ -3,6 +3,8 @@ import { fetchAllTags } from '@/lib/api/tags';
 import { Badge } from '@/components/ui/badge';
 import { Tag } from 'lucide-react';
 import type { Metadata } from 'next';
+import { generateCollectionPageSchema, generateBreadcrumbSchema } from '@/lib/schemas';
+import { siteConfig } from '@/lib/metadata';
 
 export const metadata: Metadata = {
   title: 'جميع الوسوم - اليوم ميديا',
@@ -12,8 +14,35 @@ export const metadata: Metadata = {
 export default async function TagsPage() {
   const tags = await fetchAllTags();
 
+  // Generate schemas for SEO
+  const tagsUrl = `${siteConfig.url}/tags`;
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: 'جميع الوسوم', url: tagsUrl }
+  ]);
+  const collectionSchema = tags.length > 0 ? generateCollectionPageSchema(
+    'جميع الوسوم',
+    'تصفح المقالات حسب الوسوم',
+    tagsUrl,
+    tags.map(tag => ({
+      title: tag.name,
+      url: `${siteConfig.url}/tag/${tag.slug}`
+    }))
+  ) : null;
+
   return (
     <div className="min-h-screen">
+      {/* JSON-LD Schemas */}
+      {collectionSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

@@ -33,3 +33,35 @@ export const GET_THEME_SETTINGS = gql`
     }
   }
 `;
+
+export const GET_HOME_PAGE_AD_BANNERS = gql`
+  query HomePageAdBanners {
+    themeSettings {
+      themeOptionsFields {
+        homePageAdBanner1
+        homePageAdBanner2
+        homePageAdBanner3
+        homePageAdBanner4
+        homePageAdBanner5
+        homePageAdBanner6
+        homePageAdBanner7
+        homePageAdBanner8
+        homePageAdBanner9
+        homePageAdBanner10
+        homePageAdBanner11
+        homePageAdBanner12
+        articlePageAdBanner
+      }
+    }
+  }
+`;
+
+export const GET_HEADER_AD_BANNER = gql`
+  query GetHeaderAdBanner {
+    themeSettings {
+      themeOptionsFields {
+        headerAdBanner
+      }
+    }
+  }
+`;

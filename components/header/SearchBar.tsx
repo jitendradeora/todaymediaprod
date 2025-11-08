@@ -27,7 +27,8 @@ export function SearchBar() {
       />
       <button
         type="submit"
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+        className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 min-h-11 min-w-11 flex items-center justify-center text-muted-foreground"
+        aria-label="بحث"
       >
         <Search className="w-5 h-5" />
       </button>

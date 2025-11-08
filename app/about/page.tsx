@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { getAboutPageData } from "@/lib/actions/about/aboutAction";
 import { getIcon } from "@/lib/utils/iconMapper";
 import Link from "next/link";
+import { generateAboutPageSchema, generateBreadcrumbSchema } from "@/lib/schemas";
+import { siteConfig } from "@/lib/metadata";
 
 export default async function About() {
   const data = await getAboutPageData();
@@ -16,8 +18,29 @@ export default async function About() {
   const VisionIcon = getIcon(aboutData.visionIconClass);
   const MissionIcon = getIcon(aboutData.iconClassMission);
 
+  // Generate schemas for SEO
+  const aboutUrl = `${siteConfig.url}/about`;
+  const aboutPageSchema = generateAboutPageSchema(
+    aboutData.pageTitle || 'من نحن',
+    aboutData.pageDescription || 'تعرف على اليوم ميديا',
+    aboutUrl
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: aboutData.pageTitle || 'من نحن', url: aboutUrl }
+  ]);
+
   return (
     <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <div className="container mx-auto px-4 py-8 max-w-[85.375rem]">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">

@@ -35,9 +35,12 @@ export function MobileMenu({ categories, socialLinks }: MobileMenuProps) {
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="فتح القائمة">
+        <button 
+          aria-label="فتح القائمة"
+          className="h-11 w-11 min-h-11 min-w-11 flex items-center justify-center"
+        >
           <Menu className="w-6 h-6" />
-        </Button>
+        </button>
       </SheetTrigger>
       <SheetContent
         side="right"

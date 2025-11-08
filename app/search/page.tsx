@@ -6,6 +6,8 @@ import NewsCard from '@/components/NewsCard';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Article } from '@/types';
+import { generateWebPageSchema, generateBreadcrumbSchema } from '@/lib/schemas';
+import { siteConfig } from '@/lib/metadata';
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -99,18 +101,41 @@ function SearchContent() {
 }
 
 export default function SearchPage() {
+  // Generate schemas for SEO
+  const searchUrl = `${siteConfig.url}/search`;
+  const webPageSchema = generateWebPageSchema(
+    'البحث',
+    'ابحث عن الأخبار والمقالات على اليوم ميديا',
+    searchUrl
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: 'البحث', url: searchUrl }
+  ]);
+
   return (
-    <Suspense fallback={
-      <div className="min-h-screen">
-        <main className="container mx-auto px-4 py-8">
-          <div className="mb-8">
-            <h1 className="text-3xl mb-6">نتائج البحث</h1>
-            <p className="text-gray-600">جاري التحميل...</p>
-          </div>
-        </main>
-      </div>
-    }>
-      <SearchContent />
-    </Suspense>
+    <>
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <Suspense fallback={
+        <div className="min-h-screen">
+          <main className="container mx-auto px-4 py-8">
+            <div className="mb-8">
+              <h1 className="text-3xl mb-6">نتائج البحث</h1>
+              <p className="text-gray-600">جاري التحميل...</p>
+            </div>
+          </main>
+        </div>
+      }>
+        <SearchContent />
+      </Suspense>
+    </>
   );
 }

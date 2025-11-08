@@ -20,10 +20,11 @@ export function ThemeToggle() {
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 text-white hover:bg-white/20"
+        className="h-11 w-11 min-h-11 min-w-11 text-white hover:bg-white/20"
         disabled
+        aria-label="تبديل المظهر"
       >
-        <Sun className="h-4 w-4" />
+        <Sun className="h-5 w-5" />
       </Button>
     );
   }
@@ -33,12 +34,13 @@ export function ThemeToggle() {
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="h-8 w-8 text-white hover:bg-white/20"
+      className="h-11 w-11 min-h-11 min-w-11 text-white hover:bg-white/20"
+      aria-label={theme === "light" ? "تفعيل الوضع الليلي" : "تفعيل الوضع النهاري"}
     >
       {theme === "light" ? (
-        <Moon className="h-4 w-4" />
+        <Moon className="h-5 w-5" />
       ) : (
-        <Sun className="h-4 w-4" />
+        <Sun className="h-5 w-5" />
       )}
     </Button>
   );

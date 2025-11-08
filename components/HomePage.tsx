@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 import { fetchHomePageConfig, fetchHomePageArticles } from "@/lib/actions/site/homeActions";
 import { fetchLatestVideos } from "@/lib/api/videos";
+import { fetchHomePageAdBanners } from "@/lib/actions/site/themeSettingsAction";
 
 // Dynamically import heavy client components to reduce initial JS bundle
 // This improves TBT (Total Blocking Time) significantly on mobile
@@ -39,6 +40,10 @@ export default async function Home() {
   // Fetch all articles based on configuration
   const { heroArticles, sectionArticles } = await fetchHomePageArticles(config);
 
+  // Fetch ad banners
+  const adBanners = await fetchHomePageAdBanners();
+  
+
   // Extract individual section articles
   const section1 = sectionArticles[0] || [];
   const section2 = sectionArticles[1] || [];
@@ -67,6 +72,19 @@ export default async function Home() {
     return 4; // Default to 4 columns
   };
 
+  // Helper function to get category link for a section
+  const getCategoryLink = (section: typeof sections[0]): string | undefined => {
+    // Use sectionTitleLink if available
+    if (section?.sectionTitleLink) {
+      return section.sectionTitleLink;
+    }
+    // Otherwise, use the first category slug
+    if (section?.categories && section.categories.length > 0) {
+      return `/category/${section.categories[0]}`;
+    }
+    return undefined;
+  };
+
   return (
     <div className="min-h-screen">
       {/* Breaking News Bar - Client Component */}
@@ -92,6 +110,7 @@ export default async function Home() {
                 bgColor="bg-background"
                 title={sections[0].sectionTitle || undefined}
                 color={sections[0].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[0])}
               />
             ) : sections[0].enableExcerpt ? (
               <HorizontalSection
@@ -99,6 +118,7 @@ export default async function Home() {
                 articles={section1}
                 color={sections[0].sectionTitleUndelineColor || "#ea580c"}
                 bgColor="bg-background"
+                categoryLink={getCategoryLink(sections[0])}
               />
             ) : (
               <GridSection
@@ -108,6 +128,9 @@ export default async function Home() {
                 columns={getColumns(sections[0].sectionColumnLayout)}
                 showExcerpt={sections[0].enableExcerpt}
                 bgColor="bg-background"
+                sectionNumber={1}
+                adBanner={adBanners?.homePageAdBanner1}
+                categoryLink={getCategoryLink(sections[0])}
               />
             )
           )}
@@ -120,6 +143,7 @@ export default async function Home() {
                 bgColor="bg-muted/20"
                 title={sections[1].sectionTitle || undefined}
                 color={sections[1].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[1])}
               />
             ) : sections[1].enableExcerpt ? (
               <HorizontalSection
@@ -127,6 +151,7 @@ export default async function Home() {
                 articles={section2}
                 color={sections[1].sectionTitleUndelineColor || "#ea580c"}
                 bgColor="bg-muted/20"
+                categoryLink={getCategoryLink(sections[1])}
               />
             ) : (
               <GridSection
@@ -136,6 +161,9 @@ export default async function Home() {
                 columns={getColumns(sections[1].sectionColumnLayout)}
                 showExcerpt={sections[1].enableExcerpt}
                 bgColor="bg-muted/20"
+                sectionNumber={2}
+                adBanner={adBanners?.homePageAdBanner2}
+                categoryLink={getCategoryLink(sections[1])}
               />
             )
           )}
@@ -148,6 +176,7 @@ export default async function Home() {
                 bgColor="bg-background"
                 title={sections[2].sectionTitle || undefined}
                 color={sections[2].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[2])}
               />
             ) : (
               <GridSection
@@ -157,6 +186,9 @@ export default async function Home() {
                 columns={getColumns(sections[2].sectionColumnLayout)}
                 showExcerpt={sections[2].enableExcerpt}
                 bgColor="bg-background"
+                sectionNumber={3}
+                adBanner={adBanners?.homePageAdBanner3}
+                categoryLink={getCategoryLink(sections[2])}
               />
             )
           )}
@@ -169,6 +201,7 @@ export default async function Home() {
                 bgColor="bg-muted/20"
                 title={sections[3].sectionTitle || undefined}
                 color={sections[3].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[3])}
               />
             ) : (
               <GridSection
@@ -178,6 +211,9 @@ export default async function Home() {
                 columns={getColumns(sections[3].sectionColumnLayout)}
                 showExcerpt={sections[3].enableExcerpt}
                 bgColor="bg-muted/20"
+                sectionNumber={4}
+                adBanner={adBanners?.homePageAdBanner4}
+                categoryLink={getCategoryLink(sections[3])}
               />
             )
           )}
@@ -190,6 +226,7 @@ export default async function Home() {
                 bgColor="bg-background"
                 title={sections[4].sectionTitle || undefined}
                 color={sections[4].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[4])}
               />
             ) : (
               <GridSection
@@ -199,6 +236,9 @@ export default async function Home() {
                 columns={getColumns(sections[4].sectionColumnLayout)}
                 showExcerpt={sections[4].enableExcerpt}
                 bgColor="bg-background"
+                sectionNumber={5}
+                adBanner={adBanners?.homePageAdBanner5}
+                categoryLink={getCategoryLink(sections[4])}
               />
             )
           )}
@@ -211,6 +251,7 @@ export default async function Home() {
                 bgColor="bg-muted/20"
                 title={sections[5].sectionTitle || undefined}
                 color={sections[5].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[5])}
               />
             )  : (
               <GridSection
@@ -220,6 +261,9 @@ export default async function Home() {
                 columns={getColumns(sections[5].sectionColumnLayout)}
                 showExcerpt={sections[5].enableExcerpt}
                 bgColor="bg-muted/20"
+                sectionNumber={6}
+                adBanner={adBanners?.homePageAdBanner6}
+                categoryLink={getCategoryLink(sections[5])}
               />
             )
           )}
@@ -232,6 +276,7 @@ export default async function Home() {
                 bgColor="bg-background"
                 title={sections[6].sectionTitle || undefined}
                 color={sections[6].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[6])}
               />
             ) : (
               <GridSection
@@ -241,6 +286,9 @@ export default async function Home() {
                 columns={getColumns(sections[6].sectionColumnLayout)}
                 showExcerpt={sections[6].enableExcerpt}
                 bgColor="bg-background"
+                sectionNumber={7}
+                adBanner={adBanners?.homePageAdBanner7}
+                categoryLink={getCategoryLink(sections[6])}
               />
             )
           )}
@@ -253,6 +301,7 @@ export default async function Home() {
                 bgColor="bg-muted/20"
                 title={sections[7].sectionTitle || undefined}
                 color={sections[7].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[7])}
               />
             ) : sections[7].enableExcerpt ? (
               <HorizontalSection
@@ -260,6 +309,7 @@ export default async function Home() {
                 articles={section8}
                 color={sections[7].sectionTitleUndelineColor || "#ea580c"}
                 bgColor="bg-muted/20"
+                categoryLink={getCategoryLink(sections[7])}
               />
             ) : (
               <GridSection
@@ -269,6 +319,9 @@ export default async function Home() {
                 columns={getColumns(sections[7].sectionColumnLayout)}
                 showExcerpt={sections[7].enableExcerpt}
                 bgColor="bg-muted/20"
+                sectionNumber={8}
+                adBanner={adBanners?.homePageAdBanner8}
+                categoryLink={getCategoryLink(sections[7])}
               />
             )
           )}
@@ -280,6 +333,7 @@ export default async function Home() {
                 articles={section9}
                 color={sections[8].sectionTitleUndelineColor || "#ea580c"}
                 bgColor="bg-background"
+                categoryLink={getCategoryLink(sections[8])}
               />
           )}
 
@@ -292,6 +346,7 @@ export default async function Home() {
                 bgColor="bg-muted/20"
                 title={sections[9].sectionTitle || undefined}
                 color={sections[9].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[9])}
               />
             ) :(
               <GridSection
@@ -301,6 +356,9 @@ export default async function Home() {
                 columns={getColumns(sections[9].sectionColumnLayout)}
                 showExcerpt={sections[9].enableExcerpt}
                 bgColor="bg-muted/20"
+                sectionNumber={10}
+                adBanner={adBanners?.homePageAdBanner10}
+                categoryLink={getCategoryLink(sections[9])}
               />
             )
           )}
@@ -313,6 +371,7 @@ export default async function Home() {
                 bgColor="bg-background"
                 title={sections[10].sectionTitle || undefined}
                 color={sections[10].sectionTitleUndelineColor || "#ea580c"}
+                categoryLink={getCategoryLink(sections[10])}
               />
             ) : (
               <GridSection
@@ -322,6 +381,9 @@ export default async function Home() {
                 columns={getColumns(sections[10].sectionColumnLayout)}
                 showExcerpt={sections[10].enableExcerpt}
                 bgColor="bg-background"
+                sectionNumber={11}
+                adBanner={adBanners?.homePageAdBanner11}
+                categoryLink={getCategoryLink(sections[10])}
               />
             )
           )}

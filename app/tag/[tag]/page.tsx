@@ -4,6 +4,8 @@ import { fetchArticlesByTag } from '@/lib/api/articles';
 import { fetchTagBySlug } from '@/lib/api/tags';
 import { Tag } from 'lucide-react';
 import type { Metadata } from 'next';
+import { generateCollectionPageSchema, generateBreadcrumbSchema } from '@/lib/schemas';
+import { siteConfig } from '@/lib/metadata';
 
 interface PageProps {
   params: Promise<{
@@ -67,8 +69,35 @@ export default async function TagPage({ params }: PageProps) {
   // Fetch articles by tag from WordPress
   const { articles: tagArticles, pageInfo } = await fetchArticlesByTag(tag, 12);
 
+  // Generate schemas for SEO
+  const tagUrl = `${siteConfig.url}/tag/${tag}`;
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: decodedTag, url: tagUrl }
+  ]);
+  const collectionSchema = tagArticles.length > 0 ? generateCollectionPageSchema(
+    `وسم: ${decodedTag}`,
+    `تصفح جميع المقالات الموسومة بـ ${decodedTag}`,
+    tagUrl,
+    tagArticles.map(article => ({
+      title: article.title,
+      url: `${siteConfig.url}/${article.categorySlug}/${article.id}`
+    }))
+  ) : null;
+
   return (
     <div className="min-h-screen">
+      {/* JSON-LD Schemas */}
+      {collectionSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
+        />
+      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">

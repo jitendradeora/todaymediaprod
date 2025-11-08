@@ -1,5 +1,5 @@
 import apolloClient from "@/lib/client/ApolloClient";
-import { GET_THEME_SETTINGS } from "@/lib/queries/site/themeSettingsQueries";
+import { GET_THEME_SETTINGS, GET_HOME_PAGE_AD_BANNERS, GET_HEADER_AD_BANNER } from "@/lib/queries/site/themeSettingsQueries";
 
 // Types
 export interface SocialLink {
@@ -69,6 +69,28 @@ export interface FooterData {
   menu2Links: FooterLink[];
   copyrightText1: string;
   copyrightText2: string;
+}
+
+export interface HomePageAdBanners {
+  homePageAdBanner1: string | null;
+  homePageAdBanner2: string | null;
+  homePageAdBanner3: string | null;
+  homePageAdBanner4: string | null;
+  homePageAdBanner5: string | null;
+  homePageAdBanner6: string | null;
+  homePageAdBanner7: string | null;
+  homePageAdBanner8: string | null;
+  homePageAdBanner9: string | null;
+  homePageAdBanner10: string | null;
+  homePageAdBanner11: string | null;
+  homePageAdBanner12: string | null;
+  articlePageAdBanner: string | null;
+}
+
+interface HomePageAdBannersResponse {
+  themeSettings: {
+    themeOptionsFields: HomePageAdBanners;
+  };
 }
 
 /**
@@ -214,6 +236,68 @@ export async function fetchFooterData(): Promise<FooterData | null> {
     };
   } catch (error) {
     console.error("Error fetching footer data:", error);
+    return null;
+  }
+}
+
+/**
+ * Fetch home page ad banners
+ * Returns all 12 ad banners as HTML strings
+ */
+export async function fetchHomePageAdBanners(): Promise<HomePageAdBanners | null> {
+  try {
+    const result = await apolloClient.query<HomePageAdBannersResponse>({
+      query: GET_HOME_PAGE_AD_BANNERS,
+      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+    });
+
+    return result.data?.themeSettings?.themeOptionsFields || null;
+  } catch (error: any) {
+    console.error("Error fetching home page ad banners:", error?.message);
+    return null;
+  }
+}
+
+/**
+ * Fetch article page ad banner
+ * Returns the ad banner HTML string for article pages
+ */
+export async function fetchArticlePageAdBanner(): Promise<string | null> {
+  try {
+    const result = await apolloClient.query<HomePageAdBannersResponse>({
+      query: GET_HOME_PAGE_AD_BANNERS,
+      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+    });
+
+    return result.data?.themeSettings?.themeOptionsFields?.articlePageAdBanner || null;
+  } catch (error: any) {
+    console.error("Error fetching article page ad banner:", error?.message);
+    return null;
+  }
+}
+
+interface HeaderAdBannerResponse {
+  themeSettings: {
+    themeOptionsFields: {
+      headerAdBanner: string | null;
+    };
+  };
+}
+
+/**
+ * Fetch header ad banner
+ * Returns the ad banner HTML string for header
+ */
+export async function fetchHeaderAdBanner(): Promise<string | null> {
+  try {
+    const result = await apolloClient.query<HeaderAdBannerResponse>({
+      query: GET_HEADER_AD_BANNER,
+      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+    });
+
+    return result.data?.themeSettings?.themeOptionsFields?.headerAdBanner || null;
+  } catch (error: any) {
+    console.error("Error fetching header ad banner:", error?.message);
     return null;
   }
 }

@@ -4,6 +4,8 @@ import { Mail, Phone, MapPin } from "lucide-react";
 import { fetchContactPage } from "@/lib/api/contact";
 import { notFound } from "next/navigation";
 import ContactForm from "./ContactForm";
+import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/schemas";
+import { siteConfig } from "@/lib/metadata";
 
 // ISR: Revalidate every 24 hours
 export const revalidate = 86400;
@@ -71,8 +73,29 @@ export default async function ContactPage() {
     notFound();
   }
 
+  // Generate schemas for SEO
+  const contactUrl = `${siteConfig.url}/contact`;
+  const webPageSchema = generateWebPageSchema(
+    contactData.sectiontitle || 'اتصل بنا',
+    contactData.sectionSubtitle || 'تواصل معنا في اليوم ميديا',
+    contactUrl
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: contactData.sectiontitle || 'اتصل بنا', url: contactUrl }
+  ]);
+
   return (
     <>
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 py-8 max-w-[85.375rem]">
           {/* Page Header */}
