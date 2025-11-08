@@ -3,6 +3,8 @@ import { Shield, Lock, Eye, FileText, AlertCircle } from "lucide-react";
 import { fetchPrivacyPolicy } from "@/lib/api/privacy-policy";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { generateWebPageSchema, generateBreadcrumbSchema } from "@/lib/schemas";
+import { siteConfig } from "@/lib/metadata";
 
 // ISR: Revalidate every 24 hours (privacy policy doesn't change often)
 export const revalidate = 86400;
@@ -86,8 +88,29 @@ export default async function PrivacyPolicyPage() {
   const HeaderIcon = getIcon(privacyData.pageTitleIconClass);
   const ImportantNoteIcon = getIcon(privacyData.important_note_icon);
 
+  // Generate schemas for SEO
+  const privacyUrl = `${siteConfig.url}/privacy-policy`;
+  const webPageSchema = generateWebPageSchema(
+    privacyData.pageTitle || 'سياسة الخصوصية',
+    'سياسة الخصوصية لموقع اليوم ميديا. تعرف على كيفية جمع واستخدام وحماية معلوماتك الشخصية',
+    privacyUrl
+  );
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'الرئيسية', url: siteConfig.url },
+    { name: privacyData.pageTitle || 'سياسة الخصوصية', url: privacyUrl }
+  ]);
+
   return (
     <>
+      {/* JSON-LD Schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <div className="container mx-auto px-4 py-8 max-w-[85.375rem]">
           {/* Page Header */}

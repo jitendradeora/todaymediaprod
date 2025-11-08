@@ -76,7 +76,7 @@ export function VideoCard({
           />
           <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
             <div className="w-16 h-16 bg-[#c90000] hover:bg-[#a00000] rounded-full flex items-center justify-center text-white transition-colors">
-              <Play className="w-8 h-8 mr-1" />
+              <Play className="w-8 h-8 ml-1" />
             </div>
           </div>
           <Badge className="absolute top-2 right-2 bg-black/70 text-white">

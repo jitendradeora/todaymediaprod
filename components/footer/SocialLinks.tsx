@@ -89,7 +89,7 @@ export function SocialLinks({ heading = "تابعنا", socialLinks = [], aboutL
             <a
               key={link.url}
               href={link.url}
-              className="bg-gray-800 p-2 rounded-full hover:bg-red-600 transition-colors"
+              className="bg-gray-800 w-11 h-11 min-w-11 min-h-11 rounded-full hover:bg-red-600 transition-colors flex items-center justify-center"
               aria-label={getAriaLabel(link.platform)}
               target="_blank"
               rel="noopener noreferrer"

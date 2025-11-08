@@ -82,20 +82,23 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                   <div className="space-y-4 lg:space-y-6">
                     {/* Category Badge with Icon */}
                     <div className="flex items-center gap-2 justify-start">
-                      <div className="w-8 h-8 lg:w-12 lg:h-12 bg-[#c90000] rounded-full flex items-center justify-center shadow-lg">
-                      <Link href={`/${article.categorySlug}/${article.id}`}>
-                        <div className="w-8 h-8 lg:w-12 lg:h-12 bg-[#c90000] rounded-full flex items-center justify-center shadow-lg hover:bg-[#a00000] transition-colors cursor-pointer">
-                          <TrendingUp className="w-4 h-4 lg:w-6 lg:h-6 text-white" />
-                        </div>
+                      <Link 
+                        href={`/${article.categorySlug}/${article.id}`}
+                        aria-label={`قراءة مقال ${article.title}`}
+                        className="w-8 h-8 lg:w-12 lg:h-12 bg-[#c90000] rounded-full flex items-center justify-center shadow-lg hover:bg-[#a00000] transition-colors cursor-pointer"
+                      >
+                        <TrendingUp className="w-4 h-4 lg:w-6 lg:h-6 text-white" />
                       </Link>
-                      </div>
                       <Badge className="bg-[#c90000] hover:bg-[#a00000] text-white px-2 py-1 lg:px-4 lg:py-2 text-xs lg:text-sm shadow-lg">
                         {article.category}
                       </Badge>
                     </div>
 
                     {/* Title */}
-                    <Link href={`/${article.categorySlug}/${article.id}`}>
+                    <Link 
+                      href={`/${article.categorySlug}/${article.id}`}
+                      aria-label={`قراءة المقال: ${article.title}`}
+                    >
                       <h2 className="text-2xl lg:text-3xl xl:text-4xl leading-tight text-foreground hover:text-[#c90000] transition-colors cursor-pointer line-clamp-3">
                         {article.title}
                       </h2>
@@ -133,11 +136,13 @@ export function HeroSlider({ articles }: HeroSliderProps) {
                     </div>
 
                     {/* Read More Button */}
-                    <Link href={`/${article.categorySlug}/${article.id}`}>
-                      <button className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base">
-                        <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
-                        <span>اقرأ المزيد</span>
-                      </button>
+                    <Link 
+                      href={`/${article.categorySlug}/${article.id}`}
+                      className="bg-[#c90000] hover:bg-[#a00000] text-white px-4 lg:px-8 py-1.5 lg:py-3 rounded-lg transition-all shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1 lg:gap-2 ml-auto text-sm lg:text-base"
+                      aria-label={`اقرأ المزيد عن ${article.title}`}
+                    >
+                      <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
+                      <span>اقرأ المزيد</span>
                     </Link>
                   </div>
                 </div>
@@ -193,15 +198,15 @@ export function HeroSlider({ articles }: HeroSliderProps) {
         </div>
 
         {/* Slider Dots - Outside on mobile only */}
-        <div className="flex lg:hidden justify-center gap-2 mt-6">
+        <div className="flex lg:hidden justify-center gap-3 mt-6">
           {displayArticles.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`transition-all ${
+              className={`transition-all min-h-11 min-w-11 h-11 flex items-center justify-center ${
                 index === currentSlide
-                  ? "w-8 h-3 bg-[#c90000]"
-                  : "w-3 h-3 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400"
+                  ? "w-8 bg-[#c90000]"
+                  : "w-3 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400"
               } rounded-full`}
               aria-label={`Go to slide ${index + 1}`}
             />

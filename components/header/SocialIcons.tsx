@@ -55,7 +55,7 @@ export function SocialIcons({ socialLinks }: SocialIconsProps) {
   const displayLinks = validSocialLinks.length > 0 ? validSocialLinks : defaultSocialLinks;
 
   return (
-    <div className="flex gap-2 justify-start">
+    <div className="flex gap-3 justify-start">
       {displayLinks.map((link) => {
         const iconData = getSocialIconAndColor(link.platform);
         if (!iconData) return null;
@@ -69,7 +69,7 @@ export function SocialIcons({ socialLinks }: SocialIconsProps) {
             aria-label={label}
             target="_blank"
             rel="noopener noreferrer"
-            className={`w-9 h-9 ${color} rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity`}
+            className={`w-11 h-11 min-w-11 min-h-11 ${color} rounded-full flex items-center justify-center text-white hover:opacity-80 transition-opacity`}
           >
             <Icon className="w-4 h-4" />
           </a>

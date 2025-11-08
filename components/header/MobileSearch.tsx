@@ -23,26 +23,26 @@ export function MobileSearch() {
 
   return (
     <>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="md:hidden"
+      <button
+        className="md:hidden h-11 w-5 min-h-11 min-w-5 flex items-center justify-center"
         onClick={() => setMobileSearchOpen(true)}
         aria-label="فتح البحث"
       >
         <Search className="w-6 h-6" />
-      </Button>
+      </button>
 
       <Dialog open={mobileSearchOpen} onOpenChange={setMobileSearchOpen}>
         <DialogContent
-          className="top-0 translate-y-0 max-w-full w-full rounded-none border-0 p-4 [&>button]:hidden"
+          className="top-0 translate-y-0 max-w-full w-full rounded-none border-0 p-4 [&>button:not([data-custom-close])]:hidden"
           onInteractOutside={(e: any) => e.preventDefault()}
           onEscapeKeyDown={(e: any) => e.preventDefault()}
           aria-describedby="mobile-search-description"
         >
           <button
             onClick={() => setMobileSearchOpen(false)}
-            className="absolute left-4 top-4 z-10 text-muted-foreground hover:text-foreground transition-colors cursor-pointer !block"
+            data-custom-close
+            className="absolute left-4 top-4 z-10 h-11 w-11 min-h-11 min-w-11 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            aria-label="إغلاق البحث"
           >
             <X className="w-6 h-6" />
           </button>
@@ -63,7 +63,8 @@ export function MobileSearch() {
             />
             <button
               type="submit"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 min-h-11 min-w-11 flex items-center justify-center text-muted-foreground"
+              aria-label="بحث"
             >
               <Search className="w-5 h-5" />
             </button>

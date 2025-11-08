@@ -25,15 +25,17 @@ import {
 } from "@/components/ui/breadcrumb";
 import { ImageWithFallback } from "@/components/figma/ImageWithFallback";
 import { Article } from "@/types/articles";
+import NewsCard from "@/components/NewsCard";
 
 interface ArticleContentProps {
   article: Article;
   previousArticle?: Article | null;
   nextArticle?: Article | null;
   categorySlug: string;
+  relatedArticles?: Article[];
 }
 
-export default function ArticleContent({ article, previousArticle, nextArticle, categorySlug }: ArticleContentProps) {
+export default function ArticleContent({ article, previousArticle, nextArticle, categorySlug, relatedArticles = [] }: ArticleContentProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [currentUrl, setCurrentUrl] = useState("");
 
@@ -127,6 +129,7 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
               size="sm"
               onClick={handleFacebookShare}
               title="مشاركة على فيسبوك"
+              aria-label="مشاركة على فيسبوك"
             >
               <Facebook className="w-4 h-4 md:ml-2" />
               <span className="hidden md:inline">فيسبوك</span>
@@ -136,6 +139,7 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
               size="sm"
               onClick={handleTwitterShare}
               title="مشاركة على تويتر"
+              aria-label="مشاركة على تويتر"
             >
               <Twitter className="w-4 h-4 md:ml-2" />
               <span className="hidden md:inline">تويتر</span>
@@ -145,6 +149,7 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
               size="sm"
               onClick={handleWhatsAppShare}
               title="مشاركة على واتساب"
+              aria-label="مشاركة على واتساب"
             >
               <Share2 className="w-4 h-4 md:ml-2" />
               <span className="hidden md:inline">واتساب</span>
@@ -154,6 +159,7 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
               size="sm"
               onClick={() => window.print()}
               title="طباعة المقال"
+              aria-label="طباعة المقال"
             >
               <Printer className="w-4 h-4 md:ml-2" />
               <span className="hidden md:inline">طباعة</span>
@@ -274,6 +280,22 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
             </div>
           )}
         </article>
+
+        {/* Related Articles Section */}
+        {relatedArticles.length > 0 && (
+          <div className="mt-10 lg:mt-16 pt-8 border-t">
+            <div className="max-w-7xl mx-auto">
+              <h2 className="text-2xl md:text-3xl font-bold mb-8 text-right">
+                مقالات ذات صلة
+              </h2>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedArticles.map((relatedArticle) => (
+                  <NewsCard key={relatedArticle.id} {...relatedArticle} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
