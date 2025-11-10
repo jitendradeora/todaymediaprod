@@ -51,13 +51,14 @@ export default async function Header() {
       </div>
 
       <div className="container mx-auto px-4 py-2 lg:py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1 lg:hidden">
-            <MobileSearch />
+        <div className="flex items-center justify-between relative">
+          {/* Mobile: Search on left */}
+          <div className="lg:hidden flex-1 flex justify-start">
             <MobileMenu categories={categories} socialLinks={socialData?.links} />
           </div>
 
-          <Link href="/" className="flex items-center gap-3">
+          {/* Logo centered */}
+          <Link href="/" className="flex items-center gap-3 absolute left-1/2 -translate-x-1/2 lg:relative lg:left-0 lg:translate-x-0 lg:flex-1 lg:justify-start">
             <Image 
               src={logoUrl} 
               width={100} 
@@ -70,7 +71,15 @@ export default async function Header() {
             />
           </Link>
 
-          <SearchBar />
+          {/* Desktop: SearchBar on right, Mobile: Menu on right */}
+          <div className="flex items-center lg:flex-1 lg:justify-end">
+            <div className="hidden lg:block">
+              <SearchBar />
+            </div>
+            <div className="lg:hidden flex-1 flex justify-end">
+              <MobileSearch />
+            </div>
+          </div>
         </div>
       </div>
 
