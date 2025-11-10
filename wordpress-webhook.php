@@ -13,6 +13,7 @@
  * - Posts/Pages are created, updated, published, unpublished, or deleted
  * - Menus are updated or deleted
  * - Media files are uploaded, edited, or deleted
+ * - ACF Options Page (Theme Settings) are updated
  */
 
 // ===============================
@@ -51,6 +52,9 @@ add_action('wp_delete_nav_menu', 'trigger_nextjs_revalidation_on_menu_update');
 add_action('add_attachment', 'trigger_nextjs_revalidation_on_media');
 add_action('edit_attachment', 'trigger_nextjs_revalidation_on_media');
 add_action('delete_attachment', 'trigger_nextjs_revalidation_on_media');
+
+// ACF Options Page (Theme Settings) update
+add_action('acf/save_post', 'trigger_nextjs_revalidation_on_acf_options', 20);
 
 // ===============================
 // 📝 Functions
@@ -128,6 +132,20 @@ function trigger_nextjs_revalidation_on_menu_update($menu_id = null) {
 function trigger_nextjs_revalidation_on_media($attachment_id) {
     $post = get_post($attachment_id);
     send_revalidation_webhook($attachment_id, $post, 'media_update');
+}
+
+/**
+ * Trigger revalidation on ACF Options Page (Theme Settings) update
+ */
+function trigger_nextjs_revalidation_on_acf_options($post_id) {
+    // Check if this is an ACF options page save
+    // ACF options pages use string IDs like 'options' or the menu slug (e.g., 'theme-settings')
+    if ($post_id === 'options' || $post_id === 'theme-settings' || strpos($post_id, 'options') === 0) {
+        send_revalidation_webhook(0, (object)[
+            'post_name' => 'theme-settings',
+            'post_type' => 'acf_options'
+        ], 'theme_settings_update');
+    }
 }
 
 /**
