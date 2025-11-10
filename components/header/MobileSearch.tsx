@@ -24,7 +24,7 @@ export function MobileSearch() {
   return (
     <>
       <button
-        className="md:hidden h-11 w-5 min-h-11 min-w-5 flex items-center justify-center"
+        className="lg:hidden h-11 w-5 min-h-11 min-w-5 flex items-center justify-center"
         onClick={() => setMobileSearchOpen(true)}
         aria-label="فتح البحث"
       >
