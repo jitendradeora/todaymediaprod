@@ -101,7 +101,14 @@ async function getThemeSettings(): Promise<ThemeSettings | null> {
   try {
     const result = await apolloClient.query<ThemeSettingsResponse>({
       query: GET_THEME_SETTINGS,
-      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+      fetchPolicy: 'network-only',
+      context: {
+        fetchOptions: {
+          next: { 
+            tags: ['wordpress']
+          },
+        },
+      },
     });
 
     return result.data?.themeSettings || null;
@@ -248,7 +255,14 @@ export async function fetchHomePageAdBanners(): Promise<HomePageAdBanners | null
   try {
     const result = await apolloClient.query<HomePageAdBannersResponse>({
       query: GET_HOME_PAGE_AD_BANNERS,
-      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+      fetchPolicy: 'network-only',
+      context: {
+        fetchOptions: {
+          next: { 
+            tags: ['wordpress']
+          },
+        },
+      },
     });
 
     return result.data?.themeSettings?.themeOptionsFields || null;
@@ -266,7 +280,14 @@ export async function fetchArticlePageAdBanner(): Promise<string | null> {
   try {
     const result = await apolloClient.query<HomePageAdBannersResponse>({
       query: GET_HOME_PAGE_AD_BANNERS,
-      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+      fetchPolicy: 'network-only', // Force fresh data, bypass Apollo cache
+      context: {
+        fetchOptions: {
+          next: { 
+            tags: ['wordpress']
+          },
+        },
+      },
     });
 
     return result.data?.themeSettings?.themeOptionsFields?.articlePageAdBanner || null;
@@ -292,7 +313,14 @@ export async function fetchHeaderAdBanner(): Promise<string | null> {
   try {
     const result = await apolloClient.query<HeaderAdBannerResponse>({
       query: GET_HEADER_AD_BANNER,
-      fetchPolicy: 'no-cache', // Force fresh data, bypass Apollo cache
+      fetchPolicy: 'network-only', // Force fresh data, bypass Apollo cache
+      context: {
+        fetchOptions: {
+          next: { 
+            tags: ['wordpress']
+          },
+        },
+      },
     });
 
     return result.data?.themeSettings?.themeOptionsFields?.headerAdBanner || null;
