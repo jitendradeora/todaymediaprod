@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
@@ -39,6 +39,10 @@ export async function POST(req: NextRequest) {
     // CRITICAL: Clear all WordPress data cache using path revalidation
     // This will clear Next.js fetch cache for all WordPress GraphQL requests
     console.log('🔄 Starting revalidation process...');
+
+    // Always revalidate WordPress tag cache (for themeSettings, ad banners, etc.)
+    revalidateTag('wordpress', 'layout');
+    console.log('✅ Revalidated WordPress tag cache');
 
     // Revalidate based on action type
     if (action === 'menu_update') {
@@ -160,6 +164,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    // Revalidate WordPress tag cache for themeSettings
+    revalidateTag('wordpress', 'layout');
     revalidatePath('/', 'layout');
     console.log('✅ Manual revalidation via GET');
     
