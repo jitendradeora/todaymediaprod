@@ -117,6 +117,12 @@ export async function POST(req: NextRequest) {
       revalidatePath('/', 'layout');
       console.log('✅ Revalidated layout (media update)');
     }
+    else if (action === 'theme_settings_update') {
+      // Theme settings affect the entire site (header, footer, layout, etc.)
+      revalidatePath('/', 'layout');
+      revalidatePath('/');
+      console.log('✅ Revalidated entire site (theme settings update)');
+    }
     else {
       // Default: revalidate homepage and layout
       revalidatePath('/');
