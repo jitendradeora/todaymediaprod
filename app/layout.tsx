@@ -10,6 +10,8 @@ import GlobalLoader from "@/components/GlobalLoader";
 import { baseMetadata } from "@/lib/metadata";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Toaster } from "@/components/ui/sonner";
+import { fetchHeadBodyFooterCode } from "@/lib/actions/site/themeSettingsAction";
+import { HeadCode } from "@/components/HeadCode";
 // Use Next.js font loader to self-host Google Fonts and avoid external render-blocking requests
 import { Tajawal } from 'next/font/google';
 
@@ -41,6 +43,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch head, body, and footer code snippets
+  const { headTagCode, bodyTagCode, footerTagCode } = await fetchHeadBodyFooterCode();
 
   return (
     <html lang="ar" dir="rtl" className={tajawal.className} suppressHydrationWarning>
@@ -50,6 +54,12 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://biva.todaymedia.net" />
       </head>
       <body suppressHydrationWarning>
+        {/* Inject headTagCode (client-side injection for scripts/meta tags) */}
+        {headTagCode && <HeadCode code={headTagCode} />}
+        {/* Inject bodyTagCode just after <body> tag */}
+        {bodyTagCode && (
+          <div dangerouslySetInnerHTML={{ __html: bodyTagCode }} />
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -70,7 +80,7 @@ export default async function RootLayout({
           </Suspense>
           {children}
           <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-            <Footer />
+            <Footer footerTagCode={footerTagCode} />
           </Suspense>
           <Toaster position="top-center" richColors closeButton />
         </ThemeProvider>

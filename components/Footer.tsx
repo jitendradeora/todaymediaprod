@@ -3,7 +3,11 @@ import { ScrollToTop } from "./footer/ScrollToTop";
 import { SocialLinks } from "./footer/SocialLinks";
 import { fetchFooterMenusData, fetchFooterData, fetchSocialLinksData } from "@/lib/actions/site/themeSettingsAction";
 
-export default async function Footer() {
+interface FooterProps {
+  footerTagCode?: string | null;
+}
+
+export default async function Footer({ footerTagCode }: FooterProps) {
   const footerMenus = await fetchFooterMenusData();
   const footerData = await fetchFooterData();
   const socialData = await fetchSocialLinksData();
@@ -50,6 +54,10 @@ export default async function Footer() {
             <p>{footerData?.copyrightText2 || "Affiliated with the Arab Media House - London"}</p>
           </div>
         </div>
+        {/* Inject footerTagCode just before closing </footer> tag */}
+        {footerTagCode && (
+          <div dangerouslySetInnerHTML={{ __html: footerTagCode }} />
+        )}
       </footer>
 
       <ScrollToTop />

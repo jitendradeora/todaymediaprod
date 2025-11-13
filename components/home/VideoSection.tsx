@@ -43,8 +43,8 @@ export function VideoSection({
             href={ctaLink || "/video-category"}
             className="group flex items-center gap-2 bg-[#c90000] hover:bg-[#a00000] text-white px-5 py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg hover:scale-105"
           >
-            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span className="font-medium">{ctaLabel || "عرض الكل"}</span>
+            <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <h2 
             className="text-2xl pb-2 border-b-4 inline-block text-right"
