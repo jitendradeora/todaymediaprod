@@ -65,3 +65,15 @@ export const GET_HEADER_AD_BANNER = gql`
     }
   }
 `;
+
+export const GET_HEAD_BODY_FOOTER_CODE = gql`
+  query GetHeadBodyFooterCode {
+    themeSettings {
+      themeOptionsFields {
+        headTagCode
+        bodyTagCode
+        footerTagCode
+      }
+    }
+  }
+`;

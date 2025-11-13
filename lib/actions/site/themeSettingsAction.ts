@@ -1,5 +1,5 @@
 import apolloClient from "@/lib/client/ApolloClient";
-import { GET_THEME_SETTINGS, GET_HOME_PAGE_AD_BANNERS, GET_HEADER_AD_BANNER } from "@/lib/queries/site/themeSettingsQueries";
+import { GET_THEME_SETTINGS, GET_HOME_PAGE_AD_BANNERS, GET_HEADER_AD_BANNER, GET_HEAD_BODY_FOOTER_CODE } from "@/lib/queries/site/themeSettingsQueries";
 
 // Types
 export interface SocialLink {
@@ -327,5 +327,53 @@ export async function fetchHeaderAdBanner(): Promise<string | null> {
   } catch (error: any) {
     console.error("Error fetching header ad banner:", error?.message);
     return null;
+  }
+}
+
+interface HeadBodyFooterCodeResponse {
+  themeSettings: {
+    themeOptionsFields: {
+      headTagCode: string | null;
+      bodyTagCode: string | null;
+      footerTagCode: string | null;
+    };
+  };
+}
+
+/**
+ * Fetch head, body, and footer code snippets
+ * Returns HTML code strings for injection into head, body, and footer
+ */
+export async function fetchHeadBodyFooterCode(): Promise<{
+  headTagCode: string | null;
+  bodyTagCode: string | null;
+  footerTagCode: string | null;
+}> {
+  try {
+    const result = await apolloClient.query<HeadBodyFooterCodeResponse>({
+      query: GET_HEAD_BODY_FOOTER_CODE,
+      fetchPolicy: 'network-only',
+      context: {
+        fetchOptions: {
+          next: { 
+            tags: ['wordpress']
+          },
+        },
+      },
+    });
+
+    const fields = result.data?.themeSettings?.themeOptionsFields;
+    return {
+      headTagCode: fields?.headTagCode || null,
+      bodyTagCode: fields?.bodyTagCode || null,
+      footerTagCode: fields?.footerTagCode || null,
+    };
+  } catch (error: any) {
+    console.error("Error fetching head/body/footer code:", error?.message);
+    return {
+      headTagCode: null,
+      bodyTagCode: null,
+      footerTagCode: null,
+    };
   }
 }
