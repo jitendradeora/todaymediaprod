@@ -49,6 +49,66 @@ interface SitemapVideo {
   modified?: string | null;
 }
 
+type PostsQueryResponse = {
+  posts: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapPost[];
+  };
+};
+
+type PagesQueryResponse = {
+  pages: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapPage[];
+  };
+};
+
+type CategoriesQueryResponse = {
+  categories: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapCategory[];
+  };
+};
+
+type TagsQueryResponse = {
+  tags: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapTag[];
+  };
+};
+
+type AuthorsQueryResponse = {
+  users: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapAuthor[];
+  };
+};
+
+type VideosQueryResponse = {
+  videos: {
+    pageInfo: {
+      hasNextPage: boolean;
+      endCursor: string | null;
+    };
+    nodes: SitemapVideo[];
+  };
+};
+
 /**
  * Fetch all posts for sitemap with pagination
  */
@@ -59,19 +119,12 @@ export async function fetchAllPostsForSitemap(): Promise<SitemapPost[]> {
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        posts: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapPost[];
-        };
-      }>({
+      const result = await apolloClient.query<PostsQueryResponse>({
         query: GET_ALL_POSTS_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as PostsQueryResponse;
 
       if (data?.posts?.nodes) {
         allPosts.push(...data.posts.nodes);
@@ -99,19 +152,12 @@ export async function fetchAllPagesForSitemap(): Promise<SitemapPage[]> {
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        pages: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapPage[];
-        };
-      }>({
+      const result = await apolloClient.query<PagesQueryResponse>({
         query: GET_ALL_PAGES_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as PagesQueryResponse;
 
       if (data?.pages?.nodes) {
         allPages.push(...data.pages.nodes);
@@ -139,19 +185,12 @@ export async function fetchAllCategoriesForSitemap(): Promise<SitemapCategory[]>
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        categories: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapCategory[];
-        };
-      }>({
+      const result = await apolloClient.query<CategoriesQueryResponse>({
         query: GET_ALL_CATEGORIES_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as CategoriesQueryResponse;
 
       if (data?.categories?.nodes) {
         allCategories.push(...data.categories.nodes);
@@ -179,19 +218,12 @@ export async function fetchAllTagsForSitemap(): Promise<SitemapTag[]> {
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        tags: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapTag[];
-        };
-      }>({
+      const result = await apolloClient.query<TagsQueryResponse>({
         query: GET_ALL_TAGS_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as TagsQueryResponse;
 
       if (data?.tags?.nodes) {
         allTags.push(...data.tags.nodes);
@@ -219,19 +251,12 @@ export async function fetchAllAuthorsForSitemap(): Promise<SitemapAuthor[]> {
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        users: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapAuthor[];
-        };
-      }>({
+      const result = await apolloClient.query<AuthorsQueryResponse>({
         query: GET_ALL_AUTHORS_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as AuthorsQueryResponse;
 
       if (data?.users?.nodes) {
         allAuthors.push(...data.users.nodes);
@@ -259,19 +284,12 @@ export async function fetchAllVideosForSitemap(): Promise<SitemapVideo[]> {
 
   while (hasNextPage) {
     try {
-      const { data } = await apolloClient.query<{
-        videos: {
-          pageInfo: {
-            hasNextPage: boolean;
-            endCursor: string | null;
-          };
-          nodes: SitemapVideo[];
-        };
-      }>({
+      const result = await apolloClient.query<VideosQueryResponse>({
         query: GET_ALL_VIDEOS_FOR_SITEMAP,
         variables: { first: 100, after },
         fetchPolicy: 'network-only',
       });
+      const data = result.data as VideosQueryResponse;
 
       if (data?.videos?.nodes) {
         allVideos.push(...data.videos.nodes);
