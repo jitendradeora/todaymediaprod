@@ -176,9 +176,9 @@ export default function ArticleContent({ article, previousArticle, nextArticle, 
           </div>
 
           {/* Article Excerpt */}
-          <div className="bg-muted/50 border-r-4 border-[#c90000] p-4 mb-6">
+          {/* <div className="bg-muted/50 border-r-4 border-[#c90000] p-4 mb-6">
             <p className="text-lg leading-relaxed">{article.excerpt}</p>
-          </div>
+          </div> */}
 
           {/* Article Content */}
           <div
