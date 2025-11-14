@@ -1,17 +1,29 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { fetchArticleById, fetchArticlesByCategory } from '@/lib/api/articles';
+import { fetchPreviewPostById } from '@/lib/api/preview';
 import { generateArticleMetadata, siteConfig } from '@/lib/metadata';
 import { generateNewsArticleSchema, generateBreadcrumbSchema } from '@/lib/schemas';
 import { fetchArticlePageAdBanner } from '@/lib/actions/site/themeSettingsAction';
 import ArticleContent from './ArticleContent';
 import { Article } from '@/types/articles';
 
+// Dynamically import PreviewBanner (client component)
+const PreviewBanner = dynamic(() => import('@/components/PreviewBanner'), {
+  ssr: true,
+});
+
 interface PageProps {
   params: Promise<{ 
     category: string;
     id: string;
+  }>;
+  searchParams: Promise<{
+    preview?: string;
+    token?: string;
   }>;
 }
 
@@ -73,19 +85,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function ArticleDetailsPage({ params }: PageProps) {
+export default async function ArticleDetailsPage({ params, searchParams }: PageProps) {
   try {
     const { category, id } = await params;
+    const { token } = await searchParams;
     
-    // Fetch the current article
-    const article = await fetchArticleById(id);
+    // Check if we're in draft/preview mode
+    const { isEnabled: isDraftMode } = await draftMode();
+    
+    console.log('📄 Loading article:', { id, category, isDraftMode, hasToken: !!token });
+    
+    // Fetch the article (use preview API if in draft mode)
+    let article: Article | null = null;
+    
+    if (isDraftMode) {
+      console.log('👁️ Fetching preview content...');
+      article = await fetchPreviewPostById(id, token);
+    } else {
+      article = await fetchArticleById(id);
+    }
 
     if (!article) {
+      console.error('❌ Article not found:', id);
       notFound();
     }
 
-    // Verify the article belongs to the correct category
-    if (article.categorySlug !== category) {
+    // Verify the article belongs to the correct category (skip check in preview mode for drafts)
+    if (!isDraftMode && article.categorySlug !== category) {
+      console.error('❌ Category mismatch:', { expected: category, actual: article.categorySlug });
       notFound();
     }
 
@@ -153,6 +180,12 @@ export default async function ArticleDetailsPage({ params }: PageProps) {
 
     return (
       <>
+        {/* Preview Banner - Only shown in draft mode */}
+        {/* {isDraftMode && <PreviewBanner />} */}
+        
+        {/* Add spacing when preview banner is visible */}
+        {isDraftMode && <div className="h-16" />}
+        
         {/* JSON-LD Schema - Use generated schema */}
         <script
           type="application/ld+json"
