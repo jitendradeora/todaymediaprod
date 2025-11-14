@@ -22,8 +22,8 @@ export default function PreviewBanner() {
       // Call the exit preview API
       await fetch('/api/preview/exit');
       
-      // Refresh the page to show published content
-      router.refresh();
+      // Redirect to homepage after exiting preview
+      router.push('/');
     } catch (error) {
       console.error('Error exiting preview:', error);
       setIsExiting(false);

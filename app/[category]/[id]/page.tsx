@@ -27,18 +27,12 @@ interface PageProps {
   }>;
 }
 
-// Enable dynamic params for better flexibility
+// Disable static generation (required for preview mode with searchParams)
+// This makes the page server-rendered on demand
 export const dynamicParams = true;
 
 // ISR: Revalidate every 5 minutes
 export const revalidate = 300;
-
-// Generate static params for all articles
-export async function generateStaticParams() {
-  // Return empty array to enable dynamic rendering
-  // This avoids fetching all articles at build time
-  return [];
-}
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -88,10 +82,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ArticleDetailsPage({ params, searchParams }: PageProps) {
   try {
     const { category, id } = await params;
-    const { token } = await searchParams;
     
     // Check if we're in draft/preview mode
     const { isEnabled: isDraftMode } = await draftMode();
+    
+    // Only get searchParams if in draft mode (to avoid static generation issues)
+    let token: string | undefined;
+    if (isDraftMode) {
+      const resolvedSearchParams = await searchParams;
+      token = resolvedSearchParams.token;
+    }
     
     console.log('📄 Loading article:', { id, category, isDraftMode, hasToken: !!token });
     
@@ -181,7 +181,7 @@ export default async function ArticleDetailsPage({ params, searchParams }: PageP
     return (
       <>
         {/* Preview Banner - Only shown in draft mode */}
-        {/* {isDraftMode && <PreviewBanner />} */}
+        {isDraftMode && <PreviewBanner />}
         
         {/* Add spacing when preview banner is visible */}
         {isDraftMode && <div className="h-16" />}
