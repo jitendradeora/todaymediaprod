@@ -63,7 +63,7 @@ export function transformPostToArticle(post: any): Article {
     title: decodeHTMLEntities(post.title || ""),
     excerpt: cleanExcerpt,
     content: post.content || "",
-    image: post.featuredImage?.node?.sourceUrl || "/assets/img/default-article.jpg",
+    image: post.featuredImage?.node?.sourceUrl,
     category: post.categories?.nodes?.[0]?.name || "عام",
     categorySlug: post.categories?.nodes?.[0]?.slug || "general",
     categoryCount: post.categories?.nodes?.[0]?.count,

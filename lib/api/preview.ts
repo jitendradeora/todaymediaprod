@@ -31,7 +31,7 @@ export async function fetchPreviewPostById(id: string | number, token?: string):
         headers: {
           'Content-Type': 'application/json',
         },
-        cache: 'no-store',
+        next: { revalidate: 0 }, // Use Next.js cache option instead
       });
 
       if (response.ok) {
@@ -56,7 +56,7 @@ export async function fetchPreviewPostById(id: string | number, token?: string):
       headers: {
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      next: { revalidate: 0 }, // Use Next.js cache option instead
     });
 
     if (!response.ok) {
@@ -96,7 +96,7 @@ function transformRestPostToArticle(post: any): Article {
   }).filter(Boolean);
 
   // Extract featured image
-  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '/assets/img/default-article.jpg';
+  const featuredImage = post._embedded?.['wp:featuredmedia']?.[0]?.source_url;
 
   // Extract author
   const author = post._embedded?.['author']?.[0];
@@ -178,7 +178,7 @@ export async function fetchPreviewPostBySlug(slug: string): Promise<Article | nu
       headers: {
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      next: { revalidate: 0 }, // Use Next.js cache option instead
     });
 
     if (!response.ok) {
